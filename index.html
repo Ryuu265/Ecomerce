@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>PT DataVerse Insight - Insight for Future</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
+    />
+
+    <style>
+      :root {
+        --brand: #0d6efd;
+        --accent: #6c757d;
+        --surface: #ffffff;
+        --muted: #6b7280;
+        --radius-lg: 1rem;
+        --radius-sm: 0.5rem;
+        --max-width: 1100px;
+        --bg-light: #f7fafc;
+        --text-color: #111827;
+        /* Variabel Mode Gelap */
+        --bg-dark: #1f2937;
+        --surface-dark: #374151;
+        --text-light: #f3f4f6;
+        --shadow-color: rgba(0, 0, 0, 0.3);
+
+        --font-family-sans-serif: Inter, system-ui, -apple-system, "Segoe UI",
+          Roboto, "Helvetica Neue", Arial, sans-serif;
+      }
+
+      /* Base Style (Light Mode) */
+      body {
+        font-family: var(--font-family-sans-serif);
+        background: linear-gradient(
+          180deg,
+          var(--bg-light) 0%,
+          var(--surface) 100%
+        );
+        color: var(--text-color);
+        -webkit-font-smoothing: antialiased;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        transition: background-color 0.3s, color 0.3s;
+      }
+
+      /* Dark Mode */
+      body.dark-mode {
+        background: var(--bg-dark);
+        color: var(--text-light);
+      }
+
+      body.dark-mode .shadow-sm {
+        box-shadow: 0 0.125rem 0.25rem var(--shadow-color) !important;
+      }
+
+      body.dark-mode .bg-white {
+        background-color: var(--surface-dark) !important;
+      }
+
+      body.dark-mode .navbar-brand,
+      body.dark-mode .nav-link {
+        color: var(--text-light) !important;
+      }
+
+      body.dark-mode .nav-link:hover {
+        color: var(--brand) !important;
+      }
+
+      body.dark-mode .text-muted {
+        color: var(--muted) !important;
+      }
+
+      body.dark-mode .card,
+      body.dark-mode .form-control {
+        background-color: var(--surface-dark) !important;
+        border-color: #4b5563 !important;
+        color: var(--text-light);
+      }
+
+      body.dark-mode .form-control::placeholder {
+        color: var(--muted);
+      }
+
+      body.dark-mode .hero {
+        background: linear-gradient(
+          90deg,
+          rgba(13, 110, 253, 0.2),
+          rgba(13, 110, 253, 0.05)
+        );
+      }
+
+      body.dark-mode .btn-outline-primary {
+        color: var(--text-light);
+        border-color: var(--text-light);
+      }
+      body.dark-mode .btn-outline-primary:hover {
+        background-color: var(--text-light);
+        color: var(--bg-dark) !important;
+      }
+
+      body.dark-mode .btn-outline-success {
+        color: #198754;
+        border-color: #198754;
+      }
+      body.dark-mode .btn-outline-success:hover {
+        background-color: #198754;
+        color: var(--text-light);
+      }
+
+      /* Dark mode untuk Alert Success */
+      body.dark-mode .alert-success {
+        color: #155724;
+        background-color: #d4edda;
+        border-color: #c3e6cb;
+      }
+
+      /* Container Narrow */
+      .container-narrow {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 1rem;
+        flex-grow: 1;
+      }
+
+      /* Hero */
+      .hero {
+        padding: 3.2rem 1rem;
+        border-radius: var(--radius-lg);
+        background: linear-gradient(
+          90deg,
+          rgba(13, 110, 253, 0.06),
+          rgba(13, 110, 253, 0.02)
+        );
+      }
+
+      /* Card Spot */
+      .card-spot {
+        border-radius: var(--radius-sm);
+        box-shadow: 0 6px 18px rgba(15, 23, 42, 0.06);
+      }
+
+      body.dark-mode .card-spot {
+        box-shadow: 0 6px 18px var(--shadow-color);
+      }
+
+      /* Custom Primary Button */
+      .btn-primary.custom {
+        background: var(--brand);
+        border: none;
+        padding: 0.7rem 1.1rem;
+        border-radius: 0.6rem;
+      }
+
+      /* Fokus State (Aksesibilitas) */
+      a:focus,
+      button:focus,
+      .btn:focus {
+        outline: 3px solid rgba(13, 110, 253, 0.16);
+        outline-offset: 2px;
+      }
+
+      /* Footer */
+      footer {
+        padding: 2rem 0;
+        color: var(--muted);
+        margin-top: auto;
+      }
+
+      /* Responsive tweaks */
+      @media (min-width: 992px) {
+        .hero {
+          padding: 4rem;
+        }
+      }
+
+      /* Animasi untuk ikon mode */
+      @keyframes rotateIn {
+        from {
+          transform: rotate(-360deg) scale(0);
+          opacity: 0;
+        }
+        to {
+          transform: rotate(0deg) scale(1);
+          opacity: 1;
+        }
+      }
+
+      @keyframes rotateOut {
+        from {
+          transform: rotate(0deg) scale(1);
+          opacity: 1;
+        }
+        to {
+          transform: rotate(360deg) scale(0);
+          opacity: 0;
+        }
+      }
+
+      .mode-icon-animated {
+        animation-duration: 0.4s;
+        animation-timing-function: ease-out;
+      }
+
+      .mode-icon-enter {
+        animation-name: rotateIn;
+      }
+
+      .mode-icon-exit {
+        animation-name: rotateOut;
+        position: absolute;
+      }
+
+      /* --- CSS UNTUK TOMBOL WA MELAYANG --- */
+      .whatsapp-float {
+        position: fixed;
+        bottom: 25px;
+        right: 25px;
+        background-color: #25d366; /* Warna WhatsApp */
+        color: white;
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2.2rem; /* Ukuran ikon */
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        z-index: 100;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+      }
+
+      .whatsapp-float:hover {
+        transform: scale(1.1);
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+        color: white; /* Jaga warna ikon tetap putih */
+      }
+      /* --- AKHIR DARI CSS WA --- */
+    </style>
+  </head>
+  <body>
+    <header class="mb-4 shadow-sm bg-white">
+      <nav class="navbar navbar-expand-lg container-narrow">
+        <a class="navbar-brand fw-bold" href="#">PT DataVerse Insight</a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navMain"
+          aria-controls="navMain"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navMain">
+          <ul class="navbar-nav ms-auto align-items-lg-center">
+            <li class="nav-item">
+              <a class="nav-link" href="#services">Layanan</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#work">Keunggulan</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#contact">Kontak</a>
+            </li>
+            <li
+              class="nav-item ms-lg-2 me-3 position-relative d-flex align-items-center"
+            >
+              <button
+                id="darkModeToggle"
+                class="btn btn-link text-decoration-none p-0 d-flex align-items-center justify-content-center"
+                aria-label="Toggle Dark Mode"
+              >
+                <i id="modeIcon" class="bi h4 mb-0"></i>
+              </button>
+            </li>
+            <li class="nav-item">
+              <a class="btn btn-outline-primary" href="#contact"
+                >Hubungi Kami</a
+              >
+            </li>
+          </ul>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-narrow">
+      <section class="hero mb-5 d-flex align-items-center">
+        <div class="row w-100 align-items-center">
+          <div class="col-lg-6">
+            <h1 class="display-6 fw-bold">
+              Insight for Future: Transformasi Bisnis Melalui Kekuatan Data
+            </h1>
+            <p class="lead text-muted">
+              PT DataVerse Insight merupakan perusahaan yang bergerak di bidang
+              analisis dan visualisasi data untuk membantu organisasi mengambil
+              keputusan berbasis data yang akurat dan efisien.
+            </p>
+            <div class="mt-3">
+              <a class="btn btn-primary custom me-2" href="#services"
+                >Lihat Layanan</a
+              >
+              <a class="btn btn-outline-secondary" href="#contact">Hubungi</a>
+            </div>
+          </div>
+          <div class="col-lg-6 d-none d-lg-block">
+            <div class="card card-spot p-3 border-0">
+              <img
+                src="https://raw.githubusercontent.com/Ryuu265/Desain-Web/refs/heads/main/605bcd42-f1c4-4661-b751-4da3871712b1.png"
+                alt="Ilustrasi Data Analytics"
+                class="img-fluid rounded"
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="services" class="mb-5">
+        <h3 class="mb-3">Layanan Utama</h3>
+        <div class="row g-4">
+          <div class="col-md-4">
+            <div class="p-4 card card-spot border-0 h-100 d-flex flex-column">
+              <div>
+                <h5>1. Analisis Data (Data Analysis)</h5>
+                <ul class="text-muted small mb-3 ps-3">
+                  <li>
+                    Mengolah data bisnis untuk menemukan pola, tren, dan insight
+                    strategis.
+                  </li>
+                  <li>
+                    Menggunakan pendekatan statistik dan machine learning sesuai
+                    kebutuhan klien.
+                  </li>
+                </ul>
+              </div>
+
+              <a
+                href="https://wa.me/628123456789?text=Halo%2C%20saya%20tertarik%20dengan%20layanan%20Analisis%20Data%20untuk%20bisnis%20saya."
+                class="btn btn-sm btn-outline-success mt-auto"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <i class="bi bi-whatsapp me-2"></i>Pesan Layanan Ini
+              </a>
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <div class="p-4 card card-spot border-0 h-100 d-flex flex-column">
+              <div>
+                <h5>2. Visualisasi Data (Data Visualization)</h5>
+                <ul class="text-muted small mb-3 ps-3">
+                  <li>
+                    Membuat dashboard interaktif dan laporan visual yang mudah
+                    dipahami.
+                  </li>
+                  <li>
+                    Membantu pengambilan keputusan cepat dan berbasis data.
+                  </li>
+                </ul>
+              </div>
+
+              <a
+                href="https://wa.me/6285703071807?text=Halo%2C%20saya%20tertarik%20dengan%20layanan%20Visualisasi%20Data%20untuk%20dashboard%20bisnis%20saya."
+                class="btn btn-sm btn-outline-success mt-auto"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <i class="bi bi-whatsapp me-2"></i>Pesan Layanan Ini
+              </a>
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <div class="p-4 card card-spot border-0 h-100 d-flex flex-column">
+              <div>
+                <h5>3. Konsultasi Strategi Berbasis Data</h5>
+                <ul class="text-muted small mb-3 ps-3">
+                  <li>
+                    Memberikan rekomendasi strategis berdasarkan hasil analisis.
+                  </li>
+                  <li>
+                    Membantu organisasi dalam merancang strategi digital yang
+                    efektif.
+                  </li>
+                </ul>
+              </div>
+
+              <a
+                href="https://wa.me/628123456789?text=Halo%2C%20saya%20tertarik%20dengan%20layanan%20Konsultasi%20Strategi%20Berbasis%20Data."
+                class="btn btn-sm btn-outline-success mt-auto"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <i class="bi bi-whatsapp me-2"></i>Pesan Layanan Ini
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section id="work" class="mb-5">
+        <h3 class="mb-3">Keunggulan Perusahaan</h3>
+        <div class="row row-cols-1 row-cols-md-3 g-4">
+          <div class="col">
+            <div class="card h-100">
+              <img
+                src="https://raw.githubusercontent.com/Ryuu265/Desain-Web/refs/heads/main/Tim%20Profesional.jpg"
+                class="card-img-top"
+                alt="Tim Profesional Data"
+              />
+              <div class="card-body">
+                <h5 class="card-title">Tim Profesional</h5>
+                <p class="card-text text-muted small">
+                  Didukung oleh tim profesional di bidang data science dan
+                  bisnis yang siap memberikan solusi terbaik.
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="col">
+            <div class="card h-100">
+              <img
+                src="https://raw.githubusercontent.com/Ryuu265/Desain-Web/refs/heads/main/Gemini_Generated_Image_rq1ia5rq1ia5rq1i.png"
+                class="card-img-top"
+                alt="Penggunaan Teknologi"
+              />
+              <div class="card-body">
+                <h5 class="card-title">Teknologi Terbaru</h5>
+                <p class="card-text text-muted small">
+                  Kami menjamin penggunaan teknologi analitik terbaru dan solusi
+                  yang disesuaikan dengan kebutuhan unik klien.
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="col">
+            <div class="card h-100">
+              <img
+                src="https://raw.githubusercontent.com/Ryuu265/Desain-Web/refs/heads/main/Gemini_Generated_Image_oncrckoncrckoncr.png"
+                class="card-img-top"
+                alt="Keamanan Data"
+              />
+              <div class="card-body">
+                <h5 class="card-title">Keamanan Data</h5>
+                <p class="card-text text-muted small">
+                  Komitmen teguh terhadap keamanan dan akurasi data klien
+                  merupakan prioritas utama kami.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="contact" class="mb-5">
+        <h3 class="mb-3">Kontak PT DataVerse Insight</h3>
+        <form
+          class="row g-3 needs-validation"
+          aria-label="Form kontak"
+          novalidate
+        >
+          <div class="col-md-6">
+            <label class="form-label" for="name">Nama</label>
+            <input
+              id="name"
+              class="form-control"
+              type="text"
+              placeholder="Nama lengkap"
+              required
+            />
+            <div class="invalid-feedback">Nama wajib diisi.</div>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label" for="email">Email</label>
+            <input
+              id="email"
+              class="form-control"
+              type="email"
+              placeholder="email@contoh.com"
+              required
+            />
+            <div class="invalid-feedback">
+              Masukkan format email yang valid.
+            </div>
+          </div>
+          <div class="col-12">
+            <label class="form-label" for="message">Pesan</label>
+            <textarea
+              id="message"
+              class="form-control"
+              rows="4"
+              placeholder="Tulis pesan..."
+              required
+            ></textarea>
+            <div class="invalid-feedback">Pesan wajib diisi.</div>
+          </div>
+          <div class="col-12">
+            <button class="btn btn-primary custom" type="submit">Kirim</button>
+          </div>
+          <div class="col-12 mt-3" id="submissionMessage" style="display: none">
+            <div
+              class="alert alert-success d-flex align-items-center"
+              role="alert"
+            >
+              <i class="bi bi-check-circle-fill me-2"></i>
+              <div>Pesan Terkirim! Terima kasih telah menghubungi kami.</div>
+            </div>
+          </div>
+        </form>
+      </section>
+    </main>
+
+    <footer class="bg-white mt-5">
+      <div
+        class="container-narrow d-flex justify-content-between align-items-center"
+      >
+        <small
+          >© 2025 PT DataVerse Insight Built with HTML, CSS & Bootstrap</small
+        >
+        <div class="d-none d-sm-block">
+          <a class="text-decoration-none me-3" href="#">Privacy</a>
+          <a class="text-decoration-none" href="#">Terms</a>
+        </div>
+      </div>
+    </footer>
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+      defer
+    ></script>
+
+    <script>
+      const body = document.body;
+      const darkModeToggle = document.getElementById("darkModeToggle");
+      const modeIcon = document.getElementById("modeIcon");
+      const localStorageKey = "darkMode";
+
+      function setMode(isDark, animate = false) {
+        modeIcon.classList.remove("mode-icon-enter", "mode-icon-exit");
+
+        if (isDark) {
+          body.classList.add("dark-mode");
+          darkModeToggle.setAttribute("aria-checked", "true");
+
+          if (animate) {
+            modeIcon.classList.add("mode-icon-exit");
+            modeIcon.addEventListener("animationend", function handler() {
+              modeIcon.classList.remove(
+                "bi-brightness-high-fill",
+                "mode-icon-exit"
+              );
+              modeIcon.classList.add("bi-moon-fill", "mode-icon-enter");
+              modeIcon.style.color = "var(--text-light)";
+              modeIcon.removeEventListener("animationend", handler);
+            });
+          } else {
+            modeIcon.classList.remove("bi-brightness-high-fill");
+            modeIcon.classList.add("bi-moon-fill");
+            modeIcon.style.color = "var(--text-light)";
+          }
+        } else {
+          body.classList.remove("dark-mode");
+          darkModeToggle.setAttribute("aria-checked", "false");
+
+          if (animate) {
+            modeIcon.classList.add("mode-icon-exit");
+            modeIcon.addEventListener("animationend", function handler() {
+              modeIcon.classList.remove("bi-moon-fill", "mode-icon-exit");
+              modeIcon.classList.add(
+                "bi-brightness-high-fill",
+                "mode-icon-enter"
+              );
+              modeIcon.style.color = "var(--text-color)";
+              modeIcon.removeEventListener("animationend", handler);
+            });
+          } else {
+            modeIcon.classList.remove("bi-moon-fill");
+            modeIcon.classList.add("bi-brightness-high-fill");
+            modeIcon.style.color = "var(--text-color)";
+          }
+        }
+
+        modeIcon.classList.add("mode-icon-animated");
+      }
+
+      const savedMode = localStorage.getItem(localStorageKey);
+
+      if (savedMode === "dark") {
+        setMode(true, false);
+      } else if (savedMode === "light") {
+        setMode(false, false);
+      } else if (
+        window.matchMedia &&
+        window.matchMedia("(prefers-color-scheme: dark)").matches
+      ) {
+        setMode(true, false);
+      } else {
+        setMode(false, false);
+      }
+
+      darkModeToggle.addEventListener("click", () => {
+        const isCurrentlyDark = body.classList.contains("dark-mode");
+
+        setMode(!isCurrentlyDark, true);
+
+        const newMode = !isCurrentlyDark ? "dark" : "light";
+        localStorage.setItem(localStorageKey, newMode);
+      });
+
+      (function () {
+        "use strict";
+        const forms = document.querySelectorAll(".needs-validation");
+        const submissionMessage = document.getElementById("submissionMessage");
+
+        Array.from(forms).forEach((form) => {
+          form.addEventListener(
+            "submit",
+            (event) => {
+              event.preventDefault();
+
+              if (form.checkValidity()) {
+                submissionMessage.style.display = "block";
+
+                Array.from(form.elements).forEach((element) => {
+                  if (element.tagName !== "BUTTON") {
+                    element.disabled = true;
+                  }
+                });
+                form.querySelector('button[type="submit"]').disabled = true;
+              } else {
+                event.stopPropagation();
+                submissionMessage.style.display = "none";
+              }
+
+              form.classList.add("was-validated");
+            },
+            false
+          );
+        });
+      })();
+    </script>
+
+    <a
+      href="https://wa.me/628123456789?text=Halo%20PT%20DataVerse%20Insight%2C%20saya%20tertarik%20untuk%20menggunakan%20layanan%20Anda."
+      class="whatsapp-float"
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label="Chat on WhatsApp"
+    >
+      <i class="bi bi-whatsapp"></i>
+    </a>
+  </body>
+</html>
